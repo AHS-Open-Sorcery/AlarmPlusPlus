@@ -59,7 +59,22 @@ while cv.waitKey(1) < 0:
         # Add a point if it's confidence is higher than threshold.
         points.append((int(x), int(y)) if conf > args.thr else None)
 
+    print("New Frame:")
+    cnt = 0
+    pointsSeen = 0
+    hands = True
+    for point in points:
+        if point != None:
+            pointsSeen += 1
+        if (cnt == 4 and point == None) or (cnt == 7 and point == None):
+            hands = False
+        cnt=cnt+1
+
+    print("Test1: ", hands)
+    print("Test2: ", (pointsSeen > 8))
+
     for pair in POSE_PAIRS:
+
         partFrom = pair[0]
         partTo = pair[1]
         assert (partFrom in BODY_PARTS)
