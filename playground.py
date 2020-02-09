@@ -3,8 +3,8 @@
 import cv2 as cv
 import numpy as np
 import argparse
-from gtts import gTTS
-import os
+import threading
+import pyttsx3
 
 
 
@@ -104,4 +104,13 @@ while cv.waitKey(1) < 0:
     freq = cv.getTickFrequency() / 1000
     cv.putText(frame, '%.2fms' % (t / freq), (10, 20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
 
-    cv.imshow('OpenPose using OpenCV', frame)
+    cv.imshow('Alarm time - Do jumping jacks', frame)
+
+
+def counter(jumpingJacks):
+    engine = pyttsx3.init()
+    engine.say(str(jumpingJacks))
+    def func():
+        engine.runAndWait()
+    timer = threading.Timer(0.0, func)
+    timer.start()

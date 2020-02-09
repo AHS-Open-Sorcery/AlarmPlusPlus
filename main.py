@@ -32,5 +32,9 @@ def set_alarm():
         return render_template('set_alarm.html')
 
 
+@app.route("/set_alarm")
+def alarm():
+
+
 
 ui.run()  # call the 'run' method
