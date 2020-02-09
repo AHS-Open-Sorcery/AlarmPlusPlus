@@ -3,6 +3,10 @@
 import cv2 as cv
 import numpy as np
 import argparse
+import threading
+import pyttsx3
+
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', help='Path to image or video. Skip to capture frames from camera')
@@ -22,6 +26,11 @@ POSE_PAIRS = [["Neck", "RShoulder"], ["Neck", "LShoulder"], ["RShoulder", "RElbo
               ["Neck", "RHip"], ["RHip", "RKnee"], ["RKnee", "RAnkle"], ["Neck", "LHip"],
               ["LHip", "LKnee"], ["LKnee", "LAnkle"], ["Neck", "Nose"], ["Nose", "REye"],
               ["REye", "REar"], ["Nose", "LEye"], ["LEye", "LEar"]]
+
+jumpingJacks = 0
+armsDown = True
+
+prevThreeArmsDown = [False, False, False]
 
 inWidth = args.width
 inHeight = args.height
@@ -59,19 +68,22 @@ while cv.waitKey(1) < 0:
         # Add a point if it's confidence is higher than threshold.
         points.append((int(x), int(y)) if conf > args.thr else None)
 
-    print("New Frame:")
-    cnt = 0
     pointsSeen = 0
-    hands = True
     for point in points:
         if point != None:
             pointsSeen += 1
-        if (cnt == 4 and point == None) or (cnt == 7 and point == None):
-            hands = False
-        cnt=cnt+1
 
-    print("Test1: ", hands)
-    print("Test2: ", (pointsSeen > 8))
+    prevThreeArmsDown[2] = prevThreeArmsDown[1]
+    prevThreeArmsDown[1] = prevThreeArmsDown[0]
+    prevThreeArmsDown[0] = armsDown
+
+    armsDown = (pointsSeen > 4)
+
+    if armsDown == False and prevThreeArmsDown[0] == False and prevThreeArmsDown[1] == True and prevThreeArmsDown[2] == True:
+        jumpingJacks += 1
+
+
+    print("Jumping Jacks: ", jumpingJacks)
 
     for pair in POSE_PAIRS:
 
@@ -92,4 +104,13 @@ while cv.waitKey(1) < 0:
     freq = cv.getTickFrequency() / 1000
     cv.putText(frame, '%.2fms' % (t / freq), (10, 20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
 
-    cv.imshow('OpenPose using OpenCV', frame)
+    cv.imshow('Alarm time - Do jumping jacks', frame)
+
+
+def counter(jumpingJacks):
+    engine = pyttsx3.init()
+    engine.say(str(jumpingJacks))
+    def func():
+        engine.runAndWait()
+    timer = threading.Timer(0.0, func)
+    timer.start()

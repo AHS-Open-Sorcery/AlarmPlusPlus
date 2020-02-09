@@ -1,18 +1,9 @@
-# base code copied from https://stackoverflow.com/questions/16366857/show-webcam-sequence-tkinter/52008173
 
 import tkinter as tk
 from tkinter import messagebox, Button, Label
 import cv2
 from PIL import Image, ImageTk
 import enum
-
-
-class Instrument(enum.Enum):
-    trombone = 0
-    drums = 1
-    cymbals = 2
-    # etc ...
-
 
 window = None
 instrument = None

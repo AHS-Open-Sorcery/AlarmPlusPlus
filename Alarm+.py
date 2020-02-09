@@ -2,7 +2,6 @@
 import tkinter as tk
 from tkinter import messagebox, Button, Label
 import cv2
-from PIL import Image, ImageTk
 
 
 window = None
@@ -39,53 +38,15 @@ def popup_message(message):
     b.pack()
 
 
-def choose_instrument(chosen):
-    global instrument, timer, window, FRAME_UPDATE_MS
-    instrument = chosen
-    close_popup()
-    window = tk.Toplevel()
-    center_window(250, 50)
-    window.title(chosen.name)
-    label = Label(window, text="You have selected " + chosen.name)
-    label.pack()
-    timer = 1000 / FRAME_UPDATE_MS
-
-
-def instrument_select():
-    global window
-    window = tk.Toplevel()
-    center_window(800, 600)
-
-    window.title("Instrument Select")
-    for data in Instrument:
-        b = Button(window, text=data.name)
-        b['command'] = lambda a=data: choose_instrument(a)
-        b.pack()
-
-
-def show_frame():
-    global timer, FRAME_UPDATE_MS
-
-    _, frame = cap.read()
-    frame = cv2.flip(frame, 1)
-    cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
-    img = Image.fromarray(cv2image)
-    imgtk = ImageTk.PhotoImage(image=img)
-    lmain.imgtk = imgtk
-    lmain.configure(image=imgtk)
-    lmain.after(FRAME_UPDATE_MS, show_frame)
-    if timer >= 0:
-        timer -= 1
-    if timer == 0:
-        close_popup()
-
-
 def create_alarm():
     pass
 
 
 def init_tk():
     submit = Button(root, text="Create Alarm", command=create_alarm)
+    submit.pack()
+
+
     pass
 
 
@@ -105,8 +66,5 @@ lmain.pack()
 SCREEN_WIDTH = root.winfo_screenwidth()
 SCREEN_HEIGHT = root.winfo_screenheight()
 
-b = Button(root, text="Instrument", command=instrument_select)
-b.pack()
-show_frame()
 root.mainloop()
 
