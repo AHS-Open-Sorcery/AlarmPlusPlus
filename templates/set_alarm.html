@@ -9,7 +9,6 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -21,34 +20,107 @@
         <h5 class="white-text">When would you like to wake up?</h5>
         <hr>
         <div class="row">
-            <form class="col s12 card" method="POST" >
+            <div id="visible-form" class="col s12 card">
                 <div class="row center">
+                    <h6 id="error-message"></h6>
                     <div class="input-field col s12 m6">
                         <input id="date" type="text" class="datepicker" required>
                         <label for="date">Date</label>
                     </div>
                     <div class="input-field col s12 m6">
-                        <input id="time" type="text" class="timepicker" required>
+                        <input id="time" type="text" class="timepicker" required disabled>
                         <label for="time">Time</label>
                     </div>
                     <br>
                     <div class="input-field col s12">
-                        <input value="10" placeholder="Enter a number..." id="first_name" type="number" class="validate"
-                               required>
-                        <label for="first_name">How many jumping jacks will you do to turn off the alarm?</label>
+                        <p class="range-field">
+                            <label for="number">How many jumping jacks will you do to turn off the alarm?</label>
+                            <input type="range" id="number" min="5" max="25" step="1" oninput="updateNum(this.value)">
+                        </p>
                     </div>
-                    <button class="btn waves-effect waves-light btn-large" type="submit" name="action">Submit
+                    <button id="submit" class="btn waves-effect waves-light btn-large" name="action" onclick="submitForm()">
+                        Submit
                         <i class="material-icons right">send</i>
                     </button>
                 </div>
             </form>
+            <form id="form-invis" style="display: none; visibility: hidden" method="POST">
+                <input id="time-input" name="time" required>
+                <input name="number" value="15" required>
+            </form>
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
+    let selectedDate, selectedTime, selectedNum = 15;
+
     $(document).ready(function () {
-        $('.datepicker').datepicker();
-        $('.timepicker').timepicker();
-    });</script>
+        $('.datepicker').datepicker({
+            minDate: new Date(Date.now()),
+            onSelect: selectDate
+        });
+        $('.timepicker').timepicker({
+            onSelect: selectTime,
+            twelveHour: false
+        });
+    });
+
+    function showError(message) {
+        $("#error-message").html(message);
+    }
+
+    function clearError() {
+        $('#error-message').html('');
+    }
+
+    function selectDate(date) {
+        selectedDate = date;
+        $('#time').prop('disabled', false);
+    }
+
+    function updateNum(number) {
+        if (number > 0 && number < 25) {
+            showError("Please select a number between 0 and 25!");
+        } else {
+            selectedNum = number;
+        }
+    }
+
+    function selectTime(hour, minute) {
+        let now = new Date(Date.now());
+
+        if (selectedDate.getFullYear() > now.getFullYear() || selectedDate.getMonth() > now.getMonth() || selectedDate.getDate() > now.getDate() || hour > now.getHours() || minute > now.getMinutes()) {
+            selectedTime = [hour, minute];
+
+            clearError();
+        } else
+            showError("You must select a time after the current time!");
+    }
+
+    function submitForm() {
+        let now = new Date(Date.now());
+        if (selectedTime == null || selectedDate == null || selectedTime.length !== 2)
+            showError("Please select a date and a time!");
+        else {
+            let submittedDate = new Date();
+            submittedDate.setFullYear(selectedDate.getFullYear());
+            submittedDate.setMonth(selectedDate.getMonth());
+            submittedDate.setDate(selectedDate.getDate());
+            submittedDate.setHours(selectedTime[0]);
+            submittedDate.setMinutes(selectedTime[1]);
+
+            if (submittedDate.getTime() <= now.getTime())
+                showError("You must choose a date and time after now!");
+            else if (selectedNum < 0 || selectedNum > 25)
+                showError("You must choose a number between 0 and 25!");
+            else {
+                $('#time-input').attr('value', selectedDate.getTime());
+                $('#number').attr('value', selectedNum);
+                $('#form-invis').submit();
+            }
+        }
+    }
+</script>
 </body>
 </html>
