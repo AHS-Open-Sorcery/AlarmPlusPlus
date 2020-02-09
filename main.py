@@ -1,6 +1,7 @@
 from flask import *
 from flaskwebgui import FlaskUI  # get the FlaskUI class
 import threading
+from datetime import datetime
 import datetime as dt
 import json
 import os
@@ -57,10 +58,12 @@ def set_alarm():
         jacks = request.form.get("number")
         num_jacks = int(jacks)
 
-        alarm_time = dt.fromisoformat(time)
+        print(time)
 
-        if alarm_time - dt.datetime.now() < 0:
-            timer = threading.Timer(alarm_time - dt.datetime.now(), lambda a=num_jacks: do_jumping_jacks(a))
+        alarm_time = dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        if alarm_time - datetime.now() < 0:
+            timer = threading.Timer(alarm_time - datetime.now(), lambda a=num_jacks: do_jumping_jacks(a))
             # timer.start()
             global alarms_file
             if alarms_file is not None:

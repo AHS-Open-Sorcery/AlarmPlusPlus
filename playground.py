@@ -1,23 +1,30 @@
 # To use Inference Engine backend, specify location of plugins:
 # export LD_LIBRARY_PATH=/opt/intel/deeplearning_deploymenttoolkit/deployment_tools/external/mklml_lnx/lib:$LD_LIBRARY_PATH
+import time
+
 import cv2 as cv
 import numpy as np
 import argparse
 import threading
 import pyttsx3
 import random
-import audio
-
-x = audio.WavePlayerLoop("alarmsound.wav")
-x.run()
+import playsound
+from subprocess import call
+def thread_second():
+    while 1:
+        playsound.playsound('audio3.mp3', True)
+        time.sleep(3)
+processThread = threading.Thread(target=thread_second)  # <- note extra ','
+processThread.start()
 
 def counter(jumpingJacks):
     engine = pyttsx3.init()
     engine.say(str(jumpingJacks))
-    def func():
+    def thread_test():
         engine.runAndWait()
-    timer = threading.Timer(0.0, func)
-    timer.start()
+    processThread = threading.Thread(target=thread_test)  # <- note extra ','
+    processThread.start()
+
 
 
 parser = argparse.ArgumentParser()
@@ -91,12 +98,11 @@ while cv.waitKey(1) < 0:
     prevThreeArmsDown[1] = prevThreeArmsDown[0]
     prevThreeArmsDown[0] = armsDown
 
-    armsDown = (pointsSeen > 4)
+    armsDown = (pointsSeen > 8)
 
     if armsDown == False and prevThreeArmsDown[0] == False and prevThreeArmsDown[1] == True and prevThreeArmsDown[2] == True:
         jumpingJacks += 1
         if jumpingQuan > 0:
-            x.stop()
             counter(jumpingQuan-jumpingJacks)
             counter("more to go")
             r1 = random.randint(0, 11)
@@ -109,10 +115,8 @@ while cv.waitKey(1) < 0:
                     counter("Almost done!")
                 else:
                     counter("Move your butt loser.")
-            x.play()
 
             if jumpingQuan <= jumpingJacks:
-                x.stop()
                 counter("You are done and now awake! Have a good day.")
                 exit()
 
