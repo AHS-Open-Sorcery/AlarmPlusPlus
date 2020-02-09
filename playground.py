@@ -5,7 +5,15 @@ import numpy as np
 import argparse
 import threading
 import pyttsx3
+import random
 
+def counter(jumpingJacks):
+    engine = pyttsx3.init()
+    engine.say(str(jumpingJacks))
+    def func():
+        engine.runAndWait()
+    timer = threading.Timer(0.0, func)
+    timer.start()
 
 
 parser = argparse.ArgumentParser()
@@ -13,6 +21,7 @@ parser.add_argument('--input', help='Path to image or video. Skip to capture fra
 parser.add_argument('--thr', default=0.2, type=float, help='Threshold value for pose parts heat map')
 parser.add_argument('--width', default=368, type=int, help='Resize input to specific width.')
 parser.add_argument('--height', default=368, type=int, help='Resize input to specific height.')
+parser.add_argument('--jumpingQuantity', default=0, type=int, help='Enter number of jumping jacks')
 
 args = parser.parse_args()
 
@@ -34,6 +43,7 @@ prevThreeArmsDown = [False, False, False]
 
 inWidth = args.width
 inHeight = args.height
+jumpingQuan = args.jumpingQuantity
 
 net = cv.dnn.readNetFromTensorflow("graph_opt.pb")
 
@@ -81,7 +91,23 @@ while cv.waitKey(1) < 0:
 
     if armsDown == False and prevThreeArmsDown[0] == False and prevThreeArmsDown[1] == True and prevThreeArmsDown[2] == True:
         jumpingJacks += 1
+        if jumpingQuan > 0:
+            counter(jumpingQuan-jumpingJacks)
+            counter("more to go")
+            r1 = random.randint(0, 11)
+            if r1 < 4:
+                if r1 == 3:
+                    counter("Come on")
+                elif r1 == 2:
+                    counter("You got this")
+                elif r1 == 1:
+                    counter("Almost done!")
+                else:
+                    counter("Move your butt loser.")
 
+            if jumpingQuan <= jumpingJacks:
+                counter("You are done and now awake! Have a good day.")
+                exit()
 
     print("Jumping Jacks: ", jumpingJacks)
 
@@ -107,10 +133,3 @@ while cv.waitKey(1) < 0:
     cv.imshow('Alarm time - Do jumping jacks', frame)
 
 
-def counter(jumpingJacks):
-    engine = pyttsx3.init()
-    engine.say(str(jumpingJacks))
-    def func():
-        engine.runAndWait()
-    timer = threading.Timer(0.0, func)
-    timer.start()
