@@ -115,7 +115,7 @@
             else if (selectedNum < 0 || selectedNum > 25)
                 showError("You must choose a number between 0 and 25!");
             else {
-                $('#time-input').attr('value', selectedDate.getTime());
+                $('#time-input').attr('value', submittedDate.getTime());
                 $('#number').attr('value', selectedNum);
                 $('#form-invis').submit();
             }
