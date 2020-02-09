@@ -5,19 +5,50 @@
     <title>Set an Alarm | Alarm++</title>
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body class="indigo darken-4">
-<div class="container">
+<div class="container" id="set_alarm">
     <div style="text-align: center">
         <h3 class="white-text">Set an Alarm</h3>
         <h5 class="white-text">When would you like to wake up?</h5>
+        <hr>
+        <div class="row">
+            <form class="col s12 card" method="POST" >
+                <div class="row center">
+                    <div class="input-field col s12 m6">
+                        <input id="date" type="text" class="datepicker" required>
+                        <label for="date">Date</label>
+                    </div>
+                    <div class="input-field col s12 m6">
+                        <input id="time" type="text" class="timepicker" required>
+                        <label for="time">Time</label>
+                    </div>
+                    <br>
+                    <div class="input-field col s12">
+                        <input value="10" placeholder="Enter a number..." id="first_name" type="number" class="validate"
+                               required>
+                        <label for="first_name">How many jumping jacks will you do to turn off the alarm?</label>
+                    </div>
+                    <button class="btn waves-effect waves-light btn-large" type="submit" name="action">Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker();
+        $('.timepicker').timepicker();
+    });</script>
 </body>
 </html>
