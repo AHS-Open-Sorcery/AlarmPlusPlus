@@ -7,19 +7,21 @@ import threading
 import pyttsx3
 import random
 import playsound
-def sound():
+from subprocess import call
+def thread_second():
     while 1:
         playsound.playsound('audio3.mp3', True)
+processThread = threading.Thread(target=thread_second)  # <- note extra ','
+processThread.start()
 
-timer2 = threading.Timer(0.0, sound())
-timer2.start()
 def counter(jumpingJacks):
     engine = pyttsx3.init()
     engine.say(str(jumpingJacks))
-    def func():
+    def thread_test():
         engine.runAndWait()
-    timer = threading.Timer(0.0, func)
-    timer.start()
+    processThread = threading.Thread(target=thread_test)  # <- note extra ','
+    processThread.start()
+
 
 
 parser = argparse.ArgumentParser()
