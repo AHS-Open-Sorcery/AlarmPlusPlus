@@ -7,9 +7,9 @@ import threading
 import pyttsx3
 import random
 import audio
+import playsound
 
-x = audio.WavePlayerLoop("alarmsound.wav")
-x.run()
+playsound.playsound('audio3.mp3', True)
 
 def counter(jumpingJacks):
     engine = pyttsx3.init()
@@ -96,7 +96,6 @@ while cv.waitKey(1) < 0:
     if armsDown == False and prevThreeArmsDown[0] == False and prevThreeArmsDown[1] == True and prevThreeArmsDown[2] == True:
         jumpingJacks += 1
         if jumpingQuan > 0:
-            x.stop()
             counter(jumpingQuan-jumpingJacks)
             counter("more to go")
             r1 = random.randint(0, 11)
@@ -109,10 +108,8 @@ while cv.waitKey(1) < 0:
                     counter("Almost done!")
                 else:
                     counter("Move your butt loser.")
-            x.play()
 
             if jumpingQuan <= jumpingJacks:
-                x.stop()
                 counter("You are done and now awake! Have a good day.")
                 exit()
 
