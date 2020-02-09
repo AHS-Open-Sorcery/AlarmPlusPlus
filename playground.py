@@ -6,7 +6,6 @@ import argparse
 import threading
 import pyttsx3
 import random
-import audio
 import playsound
 
 playsound.playsound('audio3.mp3', True)
