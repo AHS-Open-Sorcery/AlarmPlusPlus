@@ -9,6 +9,7 @@ app = Flask(__name__)
 ui = FlaskUI(app)  # feed the parameters
 alarms_file = open("alarms.txt", "r+")
 
+
 # do your logic as usual in Flask
 
 def get_alarms():
@@ -19,22 +20,30 @@ def get_alarms():
     alarms_file = open("alarms.txt", "r+")
     line = alarms_file.readline()
     while line is not None:
-        #print(line)
+        # print(line)
         if not line:
             break
         alarms.append(json.loads(line))
-        #print(json.loads(line))
+        # print(json.loads(line))
         line = alarms_file.readline()
     alarms_file.close()
     return alarms
 
 
-
 @app.route("/")
 def index():
     alarms = get_alarms()
-    print(alarms)
-    return render_template('index.html')
+
+    alarms_dictionary = {
+        'time': [],
+        'number': []
+    }
+
+    for alarm in alarms:
+        alarms_dictionary['time'].append(alarm[0])
+        alarms_dictionary['number'].append(alarm[1])
+
+    return render_template('index.html', alarms=alarms_dictionary)
 
 
 def do_jumping_jacks(num_jacks):

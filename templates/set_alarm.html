@@ -110,9 +110,6 @@
             submittedDate.setHours(selectedTime[0]);
             submittedDate.setMinutes(selectedTime[1]);
 
-            console.log(submittedDate);
-            console.log(now);
-
             if (submittedDate.getTime() <= now.getTime())
                 showError("You must choose a date and time after now!");
             else if (selectedNum < 0 || selectedNum > 25)

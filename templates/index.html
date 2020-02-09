@@ -21,10 +21,14 @@
         <hr>
         <br>
         <br>
+        {% if alarms.time | length > 0 %}
         <h6 class="white-text">Your current alarms:</h6>
         <ul class="collection">
-            <li class="collection-item">Date, Time</li>
+            {% for time in alarms.time %}
+            <li class="collection-item">{{ time }}; {{ alarms.number[loop.index0] }} jumping jacks</li>
+            {% endfor %}
         </ul>
+        {% endif %}
         <br>
         <a href="/set">Set a new alarm</a>
     </div>
