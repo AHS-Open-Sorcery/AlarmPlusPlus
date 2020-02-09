@@ -1,5 +1,7 @@
 # To use Inference Engine backend, specify location of plugins:
 # export LD_LIBRARY_PATH=/opt/intel/deeplearning_deploymenttoolkit/deployment_tools/external/mklml_lnx/lib:$LD_LIBRARY_PATH
+import time
+
 import cv2 as cv
 import numpy as np
 import argparse
@@ -11,6 +13,7 @@ from subprocess import call
 def thread_second():
     while 1:
         playsound.playsound('audio3.mp3', True)
+        time.sleep(3)
 processThread = threading.Thread(target=thread_second)  # <- note extra ','
 processThread.start()
 
@@ -95,7 +98,7 @@ while cv.waitKey(1) < 0:
     prevThreeArmsDown[1] = prevThreeArmsDown[0]
     prevThreeArmsDown[0] = armsDown
 
-    armsDown = (pointsSeen > 4)
+    armsDown = (pointsSeen > 8)
 
     if armsDown == False and prevThreeArmsDown[0] == False and prevThreeArmsDown[1] == True and prevThreeArmsDown[2] == True:
         jumpingJacks += 1
