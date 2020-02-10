@@ -47,7 +47,7 @@
                 </form>
                 <form id="form-invis" style="display: none; visibility: hidden" method="POST">
                     <input id="time-input" name="time" required>
-                    <input name="number" value="15" required>
+                    <input id="number-input" name="number" value="15" required>
                 </form>
             </div>
         </div>
@@ -117,7 +117,7 @@
                     showError("You must choose a number between 0 and 25!");
                 else {
                     $('#time-input').attr('value', submittedDate.getTime());
-                    $('#number').attr('value', selectedNum);
+                    $('#number-input').attr('value', selectedNum);
                     $('#form-invis').submit();
                 }
             }
