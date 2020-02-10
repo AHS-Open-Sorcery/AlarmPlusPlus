@@ -38,89 +38,90 @@
                             <input type="range" id="number" min="5" max="25" step="1" oninput="updateNum(this.value)">
                         </p>
                     </div>
-                    <button id="submit" class="btn waves-effect waves-light btn-large" name="action" onclick="submitForm()">
+                    <button id="submit" class="btn waves-effect waves-light btn-large" name="action"
+                            onclick="submitForm()">
                         Submit
                         <i class="material-icons right">send</i>
                     </button>
                 </div>
-            </form>
-            <form id="form-invis" style="display: none; visibility: hidden" method="POST">
-                <input id="time-input" name="time" required>
-                <input name="number" value="15" required>
-            </form>
+                </form>
+                <form id="form-invis" style="display: none; visibility: hidden" method="POST">
+                    <input id="time-input" name="time" required>
+                    <input name="number" value="15" required>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script>
-    let selectedDate, selectedTime, selectedNum = 15;
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        let selectedDate, selectedTime, selectedNum = 15;
 
-    $(document).ready(function () {
-        $('.datepicker').datepicker({
-            minDate: new Date(Date.now()),
-            onSelect: selectDate
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                minDate: new Date(Date.now()),
+                onSelect: selectDate
+            });
+            $('.timepicker').timepicker({
+                onSelect: selectTime,
+                twelveHour: false
+            });
         });
-        $('.timepicker').timepicker({
-            onSelect: selectTime,
-            twelveHour: false
-        });
-    });
 
-    function showError(message) {
-        $("#error-message").html(message);
-    }
-
-    function clearError() {
-        $('#error-message').html('');
-    }
-
-    function selectDate(date) {
-        selectedDate = date;
-        $('#time').prop('disabled', false);
-    }
-
-    function updateNum(number) {
-        if (number > 0 && number < 25) {
-            showError("Please select a number between 0 and 25!");
-        } else {
-            selectedNum = number;
+        function showError(message) {
+            $("#error-message").html(message);
         }
-    }
 
-    function selectTime(hour, minute) {
-        let now = new Date(Date.now());
+        function clearError() {
+            $('#error-message').html('');
+        }
 
-        if (selectedDate.getFullYear() > now.getFullYear() || selectedDate.getMonth() > now.getMonth() || selectedDate.getDate() > now.getDate() || hour > now.getHours() || minute > now.getMinutes()) {
-            selectedTime = [hour, minute];
+        function selectDate(date) {
+            selectedDate = date;
+            $('#time').prop('disabled', false);
+        }
 
-            clearError();
-        } else
-            showError("You must select a time after the current time!");
-    }
-
-    function submitForm() {
-        let now = new Date(Date.now());
-        if (selectedTime == null || selectedDate == null || selectedTime.length !== 2)
-            showError("Please select a date and a time!");
-        else {
-            let submittedDate = new Date();
-            submittedDate.setFullYear(selectedDate.getFullYear());
-            submittedDate.setMonth(selectedDate.getMonth());
-            submittedDate.setDate(selectedDate.getDate());
-            submittedDate.setHours(selectedTime[0]);
-            submittedDate.setMinutes(selectedTime[1]);
-
-            if (submittedDate.getTime() <= now.getTime())
-                showError("You must choose a date and time after now!");
-            else if (selectedNum < 0 || selectedNum > 25)
-                showError("You must choose a number between 0 and 25!");
-            else {
-                $('#time-input').attr('value', submittedDate.getTime());
-                $('#number').attr('value', selectedNum);
-                $('#form-invis').submit();
+        function updateNum(number) {
+            if (number < 0 || number > 25) {
+                showError("Please select a number between 0 and 25!");
+            } else {
+                selectedNum = number;
             }
         }
-    }
-</script>
+
+        function selectTime(hour, minute) {
+            let now = new Date(Date.now());
+
+            if (selectedDate.getFullYear() > now.getFullYear() || selectedDate.getMonth() > now.getMonth() || selectedDate.getDate() > now.getDate() || hour > now.getHours() || minute > now.getMinutes()) {
+                selectedTime = [hour, minute];
+
+                clearError();
+            } else
+                showError("You must select a time after the current time!");
+        }
+
+        function submitForm() {
+            let now = new Date(Date.now());
+            if (selectedTime == null || selectedDate == null || selectedTime.length !== 2)
+                showError("Please select a date and a time!");
+            else {
+                let submittedDate = new Date();
+                submittedDate.setFullYear(selectedDate.getFullYear());
+                submittedDate.setMonth(selectedDate.getMonth());
+                submittedDate.setDate(selectedDate.getDate());
+                submittedDate.setHours(selectedTime[0]);
+                submittedDate.setMinutes(selectedTime[1]);
+
+                if (submittedDate.getTime() <= now.getTime())
+                    showError("You must choose a date and time after now!");
+                else if (selectedNum < 0 || selectedNum > 25)
+                    showError("You must choose a number between 0 and 25!");
+                else {
+                    $('#time-input').attr('value', submittedDate.getTime());
+                    $('#number').attr('value', selectedNum);
+                    $('#form-invis').submit();
+                }
+            }
+        }
+    </script>
 </body>
 </html>
