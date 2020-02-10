@@ -10,12 +10,13 @@ import pyttsx3
 import random
 import playsound
 from subprocess import call
+
+
 def thread_second():
     while 1:
         playsound.playsound('audio3.mp3', True)
-        time.sleep(3)
-processThread = threading.Thread(target=thread_second)  # <- note extra ','
-processThread.start()
+        time.sleep(5)
+
 
 def counter(jumpingJacks):
     engine = pyttsx3.init()
@@ -26,6 +27,8 @@ def counter(jumpingJacks):
     processThread.start()
 
 
+processThread = threading.Thread(target=thread_second)  # <- note extra ','
+# processThread.start()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', help='Path to image or video. Skip to capture frames from camera')

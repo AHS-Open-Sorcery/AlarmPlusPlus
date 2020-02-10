@@ -44,6 +44,7 @@ def index():
         alarms_dictionary['time'].append(alarm[0])
         alarms_dictionary['number'].append(alarm[1])
 
+    print(alarms)
     return render_template('index.html', alarms=alarms_dictionary)
 
 
@@ -60,16 +61,17 @@ def set_alarm():
 
         print(time)
 
-        alarm_time = dt.strftime("%Y-%m-%d %H:%M:%S")
+        alarm_time = datetime.fromtimestamp(float(time) / 1e3)
 
-        if alarm_time - datetime.now() < 0:
-            timer = threading.Timer(alarm_time - datetime.now(), lambda a=num_jacks: do_jumping_jacks(a))
-            # timer.start()
+        if alarm_time - datetime.now() > dt.timedelta(0):
+            timer = threading.Timer((alarm_time - datetime.now()).seconds, lambda a=num_jacks: do_jumping_jacks(a))
+            timer.start()
             global alarms_file
             if alarms_file is not None:
                 alarms_file.close()
             alarms_file = open("alarms.txt", "a+")
-            alarms_file.write(json.dumps((time, jacks), alarms_file) + "\n")
+            # print(json.dumps((alarm_time.strftime("%Y-%m-%d %H:%M:%S"), jacks)))
+            alarms_file.write(json.dumps((alarm_time.strftime("%Y-%m-%d %H:%M:%S"), jacks)) + "\n")
             alarms_file.close()
         return redirect(url_for("index"))
 
