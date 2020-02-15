@@ -1,15 +1,13 @@
 # To use Inference Engine backend, specify location of plugins:
 # export LD_LIBRARY_PATH=/opt/intel/deeplearning_deploymenttoolkit/deployment_tools/external/mklml_lnx/lib:$LD_LIBRARY_PATH
+import argparse
+import random
+import threading
 import time
 
 import cv2 as cv
-import numpy as np
-import argparse
-import threading
-import pyttsx3
-import random
 import playsound
-from subprocess import call
+import pyttsx3
 
 
 def thread_second():
@@ -21,8 +19,10 @@ def thread_second():
 def counter(jumpingJacks):
     engine = pyttsx3.init()
     engine.say(str(jumpingJacks))
+
     def thread_test():
         engine.runAndWait()
+
     processThread = threading.Thread(target=thread_test)  # <- note extra ','
     processThread.start()
 
@@ -103,10 +103,11 @@ while cv.waitKey(1) < 0:
 
     armsDown = (pointsSeen > 8)
 
-    if armsDown == False and prevThreeArmsDown[0] == False and prevThreeArmsDown[1] == True and prevThreeArmsDown[2] == True:
+    if armsDown == False and prevThreeArmsDown[0] == False and prevThreeArmsDown[1] == True and prevThreeArmsDown[
+        2] == True:
         jumpingJacks += 1
         if jumpingQuan > 0:
-            counter(jumpingQuan-jumpingJacks)
+            counter(jumpingQuan - jumpingJacks)
             counter("more to go")
             r1 = random.randint(0, 11)
             if r1 < 4:
@@ -145,5 +146,3 @@ while cv.waitKey(1) < 0:
     cv.putText(frame, '%.2fms' % (t / freq), (10, 20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
 
     cv.imshow('Alarm time - Do jumping jacks', frame)
-
-
