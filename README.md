@@ -1,3 +1,6 @@
+# Alarm++
+
+
 ## Inspiration
 Mornings are always a struggle. Traditional alarms might wake you up for a moment, but it's too easy to shut them off and go back to bed. We wanted a solution that forces the user to fully wake up before the alarm turns off.
 
